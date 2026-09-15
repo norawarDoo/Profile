@@ -1,76 +1,96 @@
 import { useState } from 'react'
 import './App.css'
+import heroImage from './assets/hero.png'
+import profileImage from './assets/profile.jpg'
 
-const copy = {
+const content = {
   th: {
-    lang: 'EN', switchLabel: 'เปลี่ยนเป็นภาษาอังกฤษ', home: 'หน้าแรกของนรวัฒน์',
-    nav: ['เกี่ยวกับ', 'ทักษะ', 'ผลงาน', 'ติดต่อ'], contact: 'ติดต่อฉัน',
-    available: 'พร้อมเรียนรู้และลงมือสร้าง', role: 'นักศึกษาวิทยาการคอมพิวเตอร์ · นักพัฒนาเว็บ',
-    heroTitle: <>สร้างไอเดียให้<br /><em>เป็นสิ่งที่ใช้ได้จริง</em></>,
-    heroText: 'ผมชื่อนรวัฒน์ ดูการดี นักศึกษาสาขาวิทยาการคอมพิวเตอร์และนวัตกรรมการพัฒนาซอฟต์แวร์ สนใจการพัฒนาเว็บไซต์ทั้ง Frontend และ Backend พร้อมเรียนรู้เทคโนโลยีใหม่อยู่เสมอ',
-    workButton: 'ดูผลงานของฉัน', resumeButton: 'ดูข้อมูลการศึกษา',
-    location: 'กรุงเทพฯ ประเทศไทย', status: 'เปิดรับโอกาสฝึกงาน',
-    aboutKicker: 'โปรไฟล์และการศึกษา', aboutTitle: 'เรียนรู้ผ่านการลงมือสร้างจริง',
-    aboutLead: 'เส้นทางการเรียนที่ค่อย ๆ พัฒนาจากพื้นฐานเว็บ ไปสู่ Frontend, Backend, Full Stack และ AI',
-    aboutHeading: 'เกี่ยวกับฉัน', aboutText: 'สนใจการพัฒนาเว็บทั้งฝั่งผู้ใช้และฝั่งระบบ มีประสบการณ์ทำงานร่วมกับทีม ออกแบบ UX/UI และเตรียม Dataset สำหรับ Machine Learning',
-    facts: [['ชื่อ-นามสกุล', 'นรวัฒน์ ดูการดี'], ['มหาวิทยาลัย', 'มหาวิทยาลัยศรีปทุม'], ['GPA', '3.47'], ['สาขา', 'วิทยาการคอมพิวเตอร์และนวัตกรรมการพัฒนาซอฟต์แวร์']],
-    education: 'เส้นทางการศึกษา', educationYear: '2566 — ปัจจุบัน', educationTitle: 'ปริญญาตรี · Computer Science & Software Development', educationText: 'คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยศรีปทุม',
-    skillKicker: 'ความเชี่ยวชาญ', skillTitle: 'ความสามารถและเครื่องมือ', skillLead: 'ชุดทักษะที่ใช้สร้างโปรเจกต์ ตั้งแต่การออกแบบหน้าเว็บ ไปจนถึง API และ Database',
-    skills: [['Frontend', 'พัฒนา UI ที่ Responsive ใช้งานง่าย และมี Interaction ที่เหมาะสม', 'React', 'JavaScript', 'Tailwind CSS', 'HTML / CSS', 'Vite'], ['Backend', 'ออกแบบ REST API จัดการ Business Logic และเชื่อมต่อฐานข้อมูล', 'Node.js', 'Express.js', 'Python', 'REST API', 'SQL'], ['Data & Design', 'จัดการข้อมูล ออกแบบประสบการณ์ผู้ใช้ และเตรียมข้อมูลสำหรับ AI', 'MongoDB', 'MySQL', 'SQL Server', 'UX/UI Design', 'Dataset']],
-    workKicker: 'ผลงานที่คัดสรร', workTitle: 'เส้นทางการพัฒนา', workLead: 'รวมผลงานหลักจากการเรียนรู้ ตั้งแต่ Web Application ไปจนถึง AI และระบบจัดการข้อมูล',
-    projectLabel: 'โปรเจกต์การเรียน', details: 'ดูรายละเอียด',
-    projects: [['Roadbot AI', 'AI Learning · Web Chatbot', 'ระบบผู้ช่วยวิเคราะห์ความเสี่ยงอุบัติเหตุและวางแผนการเดินทางอย่างปลอดภัยผ่านเว็บแชตบอต', ['Python', 'JavaScript', 'HTML / CSS', 'MySQL']], ['Shop Car', 'Full Stack · E-commerce', 'เว็บไซต์ขายอุปกรณ์แต่งรถยนต์ พร้อมระบบจัดการสินค้า คำสั่งซื้อ และข้อมูลผู้ใช้งาน', ['HTML / CSS', 'JavaScript', 'MySQL', 'Backend']], ['ค้นหาลานจอดรถ', 'Frontend · Database', 'ระบบตรวจสอบจำนวนที่จอดรถคงเหลือในแต่ละโซน พัฒนาด้วย React และ Express.js พร้อมฐานข้อมูล SQL Server', ['React', 'Express.js', 'SQL Server', 'UX/UI']], ['Tasknest', 'Full Stack · Productivity', 'เว็บจัดการงานสำหรับนักศึกษา รองรับการสร้าง แก้ไข ลบบอร์ด และติดตามงานร่วมกัน', ['React', 'Node.js', 'Express', 'MongoDB']], ['Long Tharm', 'UX/UI · Recipe Finder', 'ระบบค้นหาสูตรอาหารจากวัตถุดิบ รับผิดชอบการออกแบบ UX/UI และพัฒนา Frontend', ['React', 'HTML / CSS', 'JavaScript']]],
-    contactKicker: 'มาคุยกัน', contactTitle: <>พร้อมสร้างโปรเจกต์<br /><em>ดี ๆ ไปด้วยกัน</em>ไหมครับ?</>, contactText: 'หากมีไอเดีย โปรเจกต์ หรือโอกาสฝึกงาน ผมยินดีรับฟังและพูดคุยครับ', emailLabel: 'ส่งอีเมลหา Norawat', footer: 'สร้างด้วย React · ออกแบบด้วยความตั้งใจ',
+    switch: 'EN', nav: ['เรื่องราว', 'สกิล', 'โปรเจกต์'], hello: 'สวัสดี ผมนรวัฒน์',
+    headline: <>พร้อมฝึกงาน <span>พร้อมสร้าง</span> ของจริง</>,
+    intro: 'นักศึกษาระดับปริญญาตรีที่มีประสบการณ์ทำงานเป็นทีม พัฒนา Web Application และ Web Chatbot พร้อมเรียนรู้เทคโนโลยีใหม่เพื่อเติบโตไปกับองค์กร',
+    cta: 'ดูผลงาน', note: 'OPEN FOR INTERNSHIP · 2026', role: 'Frontend · Web Application · UX/UI',
+    storyLabel: '01 — เรื่องราว', storyTitle: 'เริ่มจากความสงสัย จบลงที่สิ่งที่ใช้ได้จริง',
+    storyText: 'ผมเป็นนักศึกษาคณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยศรีปทุม สาขาวิทยาการคอมพิวเตอร์และนวัตกรรมการพัฒนาซอฟต์แวร์ สนใจการพัฒนาเว็บไซต์ฝั่ง Frontend และการออกแบบ UX/UI พร้อมมีประสบการณ์ทำงานร่วมกับทีม',
+    facts: [['มหาวิทยาลัย', 'ศรีปทุม · บางเขน'], ['การศึกษา', 'ปริญญาตรี · GPA 3.47'], ['ถนัด', 'Frontend · UX/UI'], ['ติดต่อ', '099-106-8322']],
+    skillLabel: '02 — เครื่องมือในมือ', skillTitle: <>คิดเป็นระบบ <span>สร้างเป็นภาพ</span></>, skillText: 'ผสมตรรกะของโค้ดเข้ากับความรู้สึกของการออกแบบ เพื่อให้ทุกหน้าจอมีทั้ง character และ purpose',
+    skillGroups: [['01', 'FRONTEND', 'HTML, CSS, JavaScript, React, Tailwind CSS, Vite, Bootstrap'], ['02', 'BACKEND', 'Node.js, Express.js, REST API'], ['03', 'DATA + DESIGN', 'MongoDB, MySQL, Python, UX/UI, Figma, Dataset']],
+    workLabel: '03 — Selected work', workTitle: 'สิ่งที่เคยสร้าง', all: 'ทั้งหมด', filters: ['ทั้งหมด', 'Web', 'AI'],
+    projects: [['Roadbot AI', 'AI', 'Web Chatbot วิเคราะห์ความเสี่ยงอุบัติเหตุและวางแผนการเดินทางอย่างปลอดภัย เตรียม Dataset สำหรับ Machine Learning ร่วมกับทีม 4 คน', 'Python · JavaScript · HTML/CSS · MySQL'], ['Shop Car', 'Web', 'เว็บไซต์ขายอุปกรณ์แต่งรถยนต์ พร้อมระบบจัดการคำสั่งซื้อ สินค้า และข้อมูลผู้ใช้งานทั้ง Backend และ Frontend', 'HTML · CSS · JavaScript · MySQL'], ['Tasknest', 'Web', 'เว็บจัดการงานสำหรับนักศึกษา รองรับการสร้าง แก้ไข ลบบอร์ด และติดตามงานร่วมกัน', 'React · Tailwind CSS · Node.js · MongoDB · Figma'], ['ค้นหาลานจอดรถ', 'Web', 'ระบบเช็กจำนวนที่จอดรถคงเหลือในแต่ละโซน รับผิดชอบ UX/UI, Frontend และเอกสารร่วมกับทีม 4 คน', 'React · Express.js · SQL Server · Figma'], ['Long Tharm', 'Web', 'ระบบค้นหาสูตรอาหารจากวัตถุดิบ รับผิดชอบ UX/UI และ Frontend ร่วมกับทีม 7 คน', 'React · HTML/CSS · JavaScript · Figma']],
+    contactLabel: 'กำลังมองหาที่ฝึกงาน', contactTitle: <>พร้อมเรียนรู้ <span>ไปกับทีมของคุณ</span></>, contactText: 'กำลังมองหา internship ที่ได้ลงมือทำจริง เรียนรู้จากทีมเก่ง ๆ และช่วยสร้าง product ที่มีความหมาย', email: 'คุยเรื่องฝึกงาน',
   },
   en: {
-    lang: 'ไทย', switchLabel: 'Switch to Thai', home: 'Norawat home',
-    nav: ['About', 'Skills', 'Work', 'Contact'], contact: 'Contact me',
-    available: 'Ready to learn and build', role: 'Computer Science student · Web developer',
-    heroTitle: <>Turning ideas into<br /><em>useful experiences.</em></>,
-    heroText: "I'm Norawat Dookandee, a Computer Science and Software Development Innovation student focused on building Frontend and Backend web experiences while continuously learning new technologies.",
-    workButton: 'View my work', resumeButton: 'View education',
-    location: 'Bangkok, Thailand', status: 'Open to internship opportunities',
-    aboutKicker: 'Profile & education', aboutTitle: 'Learning by building real things',
-    aboutLead: 'A learning journey growing from the basics of web development into Frontend, Backend, Full Stack and AI.',
-    aboutHeading: 'About me', aboutText: 'Interested in both user-facing and system-side development, with experience in team projects, UX/UI design and Machine Learning dataset preparation.',
-    facts: [['Full name', 'Norawat Dookandee'], ['University', 'Sripatum University'], ['GPA', '3.47'], ['Major', 'Computer Science & Software Development']],
-    education: 'Education', educationYear: '2023 — Present', educationTitle: "Bachelor's degree · Computer Science & Software Development", educationText: 'Faculty of Information Technology, Sripatum University',
-    skillKicker: 'Expertise', skillTitle: 'Skills & tools', skillLead: 'A practical toolkit for building projects, from interface design to APIs and databases.',
-    skills: [['Frontend', 'Building responsive, usable UIs with thoughtful interactions.', 'React', 'JavaScript', 'Tailwind CSS', 'HTML / CSS', 'Vite'], ['Backend', 'Designing REST APIs, business logic and database connections.', 'Node.js', 'Express.js', 'Python', 'REST API', 'SQL'], ['Data & Design', 'Working with data, user experience and AI-ready datasets.', 'MongoDB', 'MySQL', 'SQL Server', 'UX/UI Design', 'Dataset']],
-    workKicker: 'Selected work', workTitle: 'The development journey', workLead: 'A selection of learning projects, from web applications to AI and data-driven systems.',
-    projectLabel: 'Learning project', details: 'View details',
-    projects: [['Roadbot AI', 'AI Learning · Web Chatbot', 'A web chatbot that analyzes accident risks and plans safer journeys.', ['Python', 'JavaScript', 'HTML / CSS', 'MySQL']], ['Shop Car', 'Full Stack · E-commerce', 'An automotive accessories store with product, order and user management.', ['HTML / CSS', 'JavaScript', 'MySQL', 'Backend']], ['Parking Finder', 'Frontend · Database', 'A system for checking available parking spaces by zone using React, Express.js and SQL Server.', ['React', 'Express.js', 'SQL Server', 'UX/UI']], ['Tasknest', 'Full Stack · Productivity', 'A student task management app for creating, editing and tracking shared boards.', ['React', 'Node.js', 'Express', 'MongoDB']], ['Long Tharm', 'UX/UI · Recipe Finder', 'A recipe finder based on ingredients, with UX/UI design and frontend development.', ['React', 'HTML / CSS', 'JavaScript']]],
-    contactKicker: "Let's talk", contactTitle: <>Ready to build something<br /><em>meaningful together?</em></>, contactText: 'Have an idea, project or internship opportunity? I would love to hear from you.', emailLabel: 'Email Norawat', footer: 'Built with React · Designed with intention',
+    switch: 'ไทย', nav: ['Story', 'Skills', 'Work'], hello: "Hi, I'm Norawat",
+    headline: <>Ready to intern. <span>Ready to build</span> for real.</>,
+    intro: 'A Computer Science student with team project experience building Web Applications and Web Chatbots, ready to learn new technologies and grow with an organization.',
+    cta: 'View my work', note: 'OPEN FOR INTERNSHIP · 2026', role: 'Frontend · Backend · Product Design',
+    storyLabel: '01 — The story', storyTitle: 'Curiosity in. Useful things out.',
+    storyText: 'I study Computer Science and Software Development Innovation at Sripatum University. I focus on Frontend development and UX/UI design, with experience collaborating on Web Applications, Web Chatbots and Machine Learning datasets.',
+    facts: [['University', 'Sripatum · Bangkhen'], ['Education', "Bachelor's · GPA 3.47"], ['Focus', 'Frontend · UX/UI'], ['Phone', '099-106-8322']],
+    skillLabel: '02 — The toolkit', skillTitle: <>Think in systems. <span>Build in pixels.</span></>, skillText: 'Blending the logic of code with the feeling of design, so every screen has both character and purpose.',
+    skillGroups: [['01', 'FRONTEND', 'HTML, CSS, JavaScript, React, Tailwind CSS, Vite, Bootstrap'], ['02', 'BACKEND', 'Node.js, Express.js, REST API'], ['03', 'DATA + DESIGN', 'MongoDB, MySQL, Python, UX/UI, Figma, Dataset']],
+    workLabel: '03 — Selected work', workTitle: 'Things I made', all: 'All work', filters: ['All', 'Web', 'AI'],
+    projects: [['Roadbot AI', 'AI', 'A web chatbot for accident risk analysis and safer route planning. Prepared a Machine Learning dataset with a team of four.', 'Python · JavaScript · HTML/CSS · MySQL'], ['Shop Car', 'Web', 'An automotive accessories store with backend order, product and user management.', 'HTML · CSS · JavaScript · MySQL'], ['Tasknest', 'Web', 'A student task management app for creating, editing, deleting and tracking shared boards.', 'React · Tailwind CSS · Node.js · MongoDB · Figma'], ['Parking Finder', 'Web', 'A zone-based parking availability system. Responsible for UX/UI, frontend and documentation in a team of four.', 'React · Express.js · SQL Server · Figma'], ['Long Tharm', 'Web', 'A recipe finder based on ingredients. Responsible for UX/UI and frontend with a team of seven.', 'React · HTML/CSS · JavaScript · Figma']],
+    contactLabel: 'Looking for an intern?', contactTitle: <>Ready to learn. <span>Ready to contribute.</span></>, contactText: 'I am looking for an internship where I can learn from a great team, ship real work and help build meaningful products.', email: 'Talk about an internship',
   },
 }
 
+function Arrow() { return <span className="arrow">↗</span> }
+
 function App() {
   const [language, setLanguage] = useState('th')
-  const t = copy[language]
+  const [filter, setFilter] = useState('ทั้งหมด')
+  const t = content[language]
   const email = 'mailto:hxuxbcud@gmail.com'
+  const visibleProjects = t.projects.filter(([, type]) => filter === t.filters[0] || type === filter)
+  const switchLanguage = () => {
+    setLanguage(language === 'th' ? 'en' : 'th')
+    setFilter(language === 'th' ? 'All' : 'ทั้งหมด')
+  }
 
   return (
-    <div className="portfolio-shell">
+    <div className="site">
       <header className="topbar">
-        <a className="brand" href="#home" aria-label={t.home}><span className="brand-mark">N</span><span className="brand-name">Norawat<span>.</span></span></a>
-        <nav aria-label={language === 'th' ? 'เมนูหลัก' : 'Main navigation'}>{t.nav.map((item, index) => <a href={`#${['about', 'skills', 'projects', 'contact'][index]}`} key={item}>{item}</a>)}</nav>
-        <div className="topbar-actions"><button className="language-switch" type="button" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label={t.switchLabel}>{t.lang}</button><a className="nav-contact" href={email}>{t.contact} <span>↗</span></a></div>
+        <a className="wordmark" href="#top"><b>n.</b><span>norawat</span></a>
+        <nav>{t.nav.map((item, i) => <a href={`#${['story', 'skills', 'work'][i]}`} key={item}>{item}</a>)}</nav>
+        <div className="top-actions"><button onClick={switchLanguage}>{t.switch}</button><a href={email} className="say-hi">Let’s talk <Arrow /></a></div>
       </header>
 
-      <main id="home">
-        <section className="hero-section">
-          <div className="hero-copy"><div className="availability"><span className="status-dot" />{t.available}</div><p className="role">{t.role}</p><h1>{t.heroTitle}</h1><p className="hero-text">{t.heroText}</p><div className="hero-actions"><a className="button button-primary" href="#projects">{t.workButton} <span>↗</span></a><a className="button button-ghost" href="#about">{t.resumeButton} <span>↓</span></a></div><div className="hero-meta"><span>{t.location}</span><span className="meta-line" /><span>{t.status}</span></div></div>
-          <div className="hero-visual"><div className="code-window"><div className="window-bar"><span /><span /><span /><small>profile.jsx</small></div><div className="code-body"><span className="code-muted">const</span> profile = {'{'}<br />&nbsp;&nbsp;name: <b>'Norawat'</b>,<br />&nbsp;&nbsp;focus: <b>'Full Stack'</b>,<br />&nbsp;&nbsp;gpa: <b>3.47</b>,<br />&nbsp;&nbsp;status: <b>'learning'</b><br />{'}'}</div></div><div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" /><div className="profile-card"><img src="/Geminieiei.jpg" alt={language === 'th' ? 'รูปโปรไฟล์ของนรวัฒน์' : 'Norawat profile'} /><span>{language === 'th' ? 'นักพัฒนา' : 'Developer'}</span></div><div className="visual-caption">SPU · CSI</div></div>
+      <main id="top">
+        <section className="hero">
+          <div className="hero-copy reveal">
+            <p className="eyebrow"><i /> {t.hello}</p>
+            <h1>{t.headline}</h1>
+            <p className="hero-intro">{t.intro}</p>
+            <div className="hero-links"><a className="primary-link" href="#work">{t.cta} <Arrow /></a><span className="availability"><i /> {t.note}</span></div>
+          </div>
+          <div className="hero-art reveal-delay">
+            <div className="art-grid" /><div className="art-ring ring-a" /><div className="art-ring ring-b" />
+            <div className="hero-orb"><img className="hero-shape" src={heroImage} alt="" /><img className="profile-image" src={profileImage} alt="นรวัฒน์ ดูการดี" /><span>BUILD WITH PURPOSE</span></div>
+            <div className="art-label">/ 01 <b>{t.role}</b></div>
+          </div>
+          <div className="scroll-cue">SCROLL TO EXPLORE <span>↓</span></div>
+          <div className="hero-ticker"><span>AVAILABLE FOR INTERNSHIP</span><b>✳</b><span>AVAILABLE FOR INTERNSHIP</span><b>✳</b><span>AVAILABLE FOR INTERNSHIP</span></div>
         </section>
 
-        <section className="intro-section section-wrap" id="about"><div className="section-heading"><p className="section-kicker">{t.aboutKicker}</p><h2>{t.aboutTitle}</h2><p className="section-lead">{t.aboutLead}</p></div><div className="about-grid"><article className="info-card about-card"><div className="card-icon">✦</div><h3>{t.aboutHeading}</h3><p>{t.aboutText}</p><div className="fact-list">{t.facts.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></article><article className="info-card education-card"><div className="card-icon">↗</div><h3>{t.education}</h3><div className="education-item"><span className="year">{t.educationYear}</span><h4>{t.educationTitle}</h4><p>{t.educationText}</p></div><div className="education-gpa"><strong>3.47</strong><span>GPA</span></div></article></div></section>
+        <section className="story section" id="story">
+          <div className="section-index">{t.storyLabel}</div>
+          <div className="story-layout"><div><h2>{t.storyTitle}</h2><p className="body-copy">{t.storyText}</p><a className="text-link" href="#contact">{t.contactLabel} <Arrow /></a></div>
+            <div className="fact-grid">{t.facts.map(([label, value]) => <div className="fact" key={label}><small>{label}</small><strong>{value}</strong></div>)}</div>
+          </div>
+        </section>
 
-        <section className="skills-section section-wrap" id="skills"><div className="section-heading"><p className="section-kicker">{t.skillKicker}</p><h2>{t.skillTitle}</h2><p className="section-lead">{t.skillLead}</p></div><div className="skills-grid">{t.skills.map(([title, description, ...tags], index) => <article className="skill-card" key={title}><div className="skill-number">0{index + 1}</div><h3>{title}</h3><p>{description}</p><div className="tag-list">{tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>)}</div></section>
+        <section className="skills section" id="skills">
+          <div className="section-index">{t.skillLabel}</div>
+          <div className="skills-layout"><div><h2>{t.skillTitle}</h2><p className="body-copy">{t.skillText}</p></div><div className="skill-list">{t.skillGroups.map(([num, title, desc]) => <div className="skill-row" key={num}><span className="skill-num">{num}</span><b>{title}</b><span>{desc}</span><Arrow /></div>)}</div></div>
+        </section>
 
-        <section className="projects-section section-wrap" id="projects"><div className="section-heading projects-heading"><p className="section-kicker">{t.workKicker}</p><h2>{t.workTitle}</h2><p className="section-lead">{t.workLead}</p></div><div className="project-grid">{t.projects.map(([title, type, description, tags], index) => <a className="project-card" href={`${email}?subject=${encodeURIComponent(title)}`} key={title}><div className="project-top"><span className="project-index">0{index + 1}</span><span>{t.projectLabel}</span><span className="project-arrow">↗</span></div><p className="project-type">{type}</p><h3>{title}</h3><p className="project-description">{description}</p><div className="tag-list">{tags.map(tag => <span key={tag}>{tag}</span>)}</div><div className="project-bottom">{t.details}<span>↗</span></div></a>)}</div></section>
+        <section className="work section" id="work">
+          <div className="work-heading"><div className="section-index">{t.workLabel}</div><h2>{t.workTitle}</h2><div className="filters">{t.filters.map(item => <button className={filter === item ? 'active' : ''} key={item} onClick={() => setFilter(item)}>{item}</button>)}</div></div>
+          <div className="project-list">{visibleProjects.map(([title, type, desc, tech], i) => <a href={`${email}?subject=${encodeURIComponent(title)}`} className="project" key={title}><span className="project-no">0{i + 1}</span><div><small>{type} / PROJECT</small><h3>{title}</h3><p>{desc}</p></div><div className="project-tech">{tech}</div><Arrow /></a>)}</div>
+        </section>
       </main>
 
-      <footer className="footer" id="contact"><div className="footer-inner"><div><p className="section-kicker">{t.contactKicker}</p><h2>{t.contactTitle}</h2><p className="contact-text">{t.contactText}</p></div><div className="footer-contact"><a className="email-link" href={email}>{t.emailLabel} <span>↗</span></a><div className="contact-details"><a href="mailto:hxuxbcud@gmail.com">hxuxbcud@gmail.com</a><a href="tel:0991068322">099-106-8322</a></div></div></div><div className="footer-bottom"><span>© 2026 Norawat Dookandee</span><span>{t.footer}</span></div></footer>
+      <footer className="contact section" id="contact"><div className="section-index">{t.contactLabel}</div><div className="contact-content"><h2>{t.contactTitle}</h2><p>{t.contactText}</p><a className="contact-button" href={email}>{t.email} <Arrow /></a><div className="contact-details"><a href={email}>hxuxbcud@gmail.com</a><a href="tel:0991068322">099-106-8322</a><span>LINE: 11111111dan</span></div></div><div className="footer-line"><span>© 2026 NORAWAT DOOKANDEE</span><span>MADE WITH CURIOSITY <b>✳</b></span></div></footer>
     </div>
   )
 }
