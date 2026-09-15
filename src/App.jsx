@@ -41,6 +41,7 @@ function App() {
   const [filter, setFilter] = useState('ทั้งหมด')
   const t = content[language]
   const email = 'mailto:hxuxbcud@gmail.com'
+  const lineUrl = 'https://line.me/ti/p/CjzkN03bMl'
   const visibleProjects = t.projects.filter(([, type]) => filter === t.filters[0] || type === filter)
   const switchLanguage = () => {
     setLanguage(language === 'th' ? 'en' : 'th')
@@ -90,7 +91,7 @@ function App() {
         </section>
       </main>
 
-      <footer className="contact section" id="contact"><div className="section-index">{t.contactLabel}</div><div className="contact-content"><h2>{t.contactTitle}</h2><p>{t.contactText}</p><a className="contact-button" href={email}>{t.email} <Arrow /></a><div className="contact-details"><a href={email}>hxuxbcud@gmail.com</a><a href="tel:0991068322">099-106-8322</a><span>LINE: 11111111dan</span></div></div><div className="footer-line"><span>© 2026 NORAWAT DOOKANDEE</span><span>MADE WITH CURIOSITY <b>✳</b></span></div></footer>
+      <footer className="contact section" id="contact"><div className="section-index">{t.contactLabel}</div><div className="contact-content"><h2>{t.contactTitle}</h2><p>{t.contactText}</p><a className="contact-button" href={lineUrl}>{t.email} <Arrow /></a><div className="contact-details"><a href={email}>hxuxbcud@gmail.com</a><a href="tel:0991068322">099-106-8322</a><a href={lineUrl}>LINE</a></div></div><div className="footer-line"><span>© 2026 NORAWAT DOOKANDEE</span><span>MADE WITH CURIOSITY <b>✳</b></span></div></footer>
     </div>
   )
 }
